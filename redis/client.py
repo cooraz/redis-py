@@ -2603,8 +2603,10 @@ class PubSubWorkerThread(threading.Thread):
         # stopping simply unsubscribes from all channels and patterns.
         # the unsubscribe responses that are generated will short circuit
         # the loop in run(), calling pubsub.close() to clean up the connection
-        self.pubsub.unsubscribe()
-        self.pubsub.punsubscribe()
+        if self.pubsub.channels:
+            self.pubsub.unsubscribe()
+        if self.pubsub.patterns:
+            self.pubsub.punsubscribe()
 
 
 class BasePipeline(object):
